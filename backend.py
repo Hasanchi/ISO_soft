@@ -8,6 +8,9 @@ class Backend:
         self.napolnit()
 
     def napolnit(self):
+
+        #  Здесь меняешь значения
+
         list_dr = [
             [30, 53, 36, 55, 60, 75, 40, 43, 67, 47],
             [12, 9.8, 15.5, 13.2, 14, 11.1, 12.1, 12.5, 11.3, 10]
@@ -15,7 +18,7 @@ class Backend:
         self.matrix = list_dr
 
     @staticmethod
-    def sort(user_list: list):
+    def change_row_columns(user_list: list):
         list_dr = [
             [],
             [],
@@ -34,10 +37,14 @@ class Backend:
                     list_dr[j].append(f'{j+1}')
                     list_dr[j].append(user_list[i][j])
                     list_dr[j].append(user_list[i-1][j])
+        return list_dr
+
+    @staticmethod
+    def sort(user_list: list):
+        list_dr = Backend.change_row_columns(user_list)
 
         sorted_list = sorted(list_dr, key=lambda x: x[1])
-        for i in sorted_list:
-            print(i)
+
         return sorted_list
 
     def normalization(self):
@@ -55,11 +62,19 @@ class Backend:
                     self.matrix[i][j] = self.matrix[i][j]/max1
                 if i == 1:
                     self.matrix[i][j] = self.matrix[i][j]/max2
+        return Backend.change_row_columns(self.matrix)
+
+    def leksi(self):
         sorted_list = Backend.sort(self.matrix)
-        self.yslovaie_neo(sorted_list)
+        print('Нормализованная отсортированная матрица')
+        for i in sorted_list:
+            print(i)
+        print('-----------')
+        self.new_matrix = sorted_list
         return sorted_list
 
-    def yslovaie_neo(self, matrix: list):
+    def yslovaie_neo(self):
+        matrix = self.new_matrix
         sum_str = 0
         for i in range(self.M):
             for j in range(self.N+1):
@@ -67,24 +82,16 @@ class Backend:
                     sum_str += matrix[i][j]
                     if j == 2:
                         matrix[i].append(sum_str/self.M)
-                        sum_str = 0
-        print('Добавдение критерия')
-        for i in matrix:
-            print(i)
-
         sorted_list = sorted(matrix, key=lambda x: x[3])
         max_value = sorted_list[-1][3]
-
-        for i in matrix:
-            print(i)
-
-        print('------------')
 
         for i in range(10):
             print(sorted_list[i])
 
         print('-------------')
         print(f'Максимальное значение критерия равно {max_value}')
+
+        return sorted_list
 
 b = Backend()
 list = b.normalization()
